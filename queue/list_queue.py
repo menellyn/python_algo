@@ -31,7 +31,7 @@ class QueueOnList:
         self._head = self._head.next
         self._size -= 1
         if self._head == None:
-            self._tail == None
+            self._tail = None
         return del_el.data
 
 

@@ -37,8 +37,8 @@ class QueueOnArray:
         if self._size == 0:
             return
         ptr = self._head
-        print("[begin]")
+        print("[begin]", end=" ")
         while ptr != self._tail:
-            print(self._queue[ptr])
+            print(self._queue[ptr], end=" ")
             ptr = (ptr + 1) % self._capacity
         print("[end]")
