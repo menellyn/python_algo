@@ -55,7 +55,15 @@ if __name__ == "__main__":
 
     while op != 'a' or op != 'b':
         if op == 'a':
-            stack = StackOnArray(int(input("Enter stack size: ")))
+            while True:
+                try:
+                    size = int(input("Enter stack size: "))
+                    while size <= 0:
+                        size = int(input("Incorrect size. Please, enter number > 0: "))
+                    break
+                except:
+                    print("Incorrect size. Please, enter integer.")
+            stack = StackOnArray(size)
             break
         elif op == 'b':
             stack = StackOnLinkedList()
