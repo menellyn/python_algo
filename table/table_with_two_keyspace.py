@@ -1,50 +1,50 @@
 class InfoType:
 
     def __init__(self, num1: int, num2: int, s: str):
-        self._num1 = num1
-        self._num2 = num2
-        self._s = s
+        self._num1: int = num1
+        self._num2: int = num2
+        self._s: str = s
 
 class Item:
 
     def __init__(self, key1: int, key2: str, info: InfoType):
-        self._key1 = key1
-        self._key2 = key2
-        self._info = info
-        self._p1 = None
-        self._p2 = None
+        self._key1: int = key1
+        self._key2: str = key2
+        self._info: InfoType = info
+        self._idx1: int = None
+        self._p2: KeySpace2 = None
 
 class KeySpace1:
 
     def __init__(self) -> None:
-        self._key = 0
-        self._par = 0
-        self._info = None 
+        self._key: int = 0
+        self._par: int = 0
+        self._info: Item = None 
 
 class Node2:
 
     def __init__(self, info: Item) -> None:
-        self._release = 0
-        self._info = info
+        self._release: int = 0
+        self._info: Item = info
         self._next: Node2 = None
 
     
 class KeySpace2:
 
     def __init__(self, key: str) -> None:
-        self._key = key
-        self._realese_couter = 1
-        self._elem_counter = 1
+        self._key: str = key
+        self._realese_couter: int = 1
+        self._elem_counter: int = 1
         self._node: Node2 = None
         self._next: KeySpace2 = None
 
 class Table:
 
     def __init__(self, msize1: int, msize2: int) -> None:
-        self._msize1 = msize1
-        self._msize2 = msize2
-        self._csize1 = 0
-        self._csize2 = 0
+        self._msize1: int = msize1
+        self._msize2: int = msize2
+        self._csize1: int = 0
+        self._csize2: int = 0
         self._ks1: list[KeySpace1] = [KeySpace1() for _ in range(msize1)]
         self._ks2: list[KeySpace2] = [None for _ in range(msize2)]
 
@@ -116,11 +116,14 @@ class Table:
 
         return None
 
-    def _add_in_ks1(self, key: int, par: int, info: Item) -> KeySpace1:
+    def _add_in_ks1(self, key: int, par: int, info: Item) -> int:
         i = self._csize1
 
         while i > 0 and self._ks1[i-1]._par > par:
-            self._ks1[i] = self._ks1[i-1]
+            self._ks1[i]._key = self._ks1[i-1]._key
+            self._ks1[i]._par = self._ks1[i-1]._par
+            self._ks1[i]._info = self._ks1[i-1]._info
+            self._ks1[i]._info._idx1 = i
             i -= 1
         
         self._ks1[i]._key = key
@@ -128,7 +131,7 @@ class Table:
         self._ks1[i]._info = info
         self._csize1 += 1
 
-        return self._ks1[i]
+        return i
 
 
     def _add_in_ks2(self, key: str, info: Item) -> Node2:
@@ -153,11 +156,13 @@ class Table:
         return new_node
     
 
-    def _delete_from_ks1(self, ks: KeySpace1) -> None:
-        idx = self._ks1.index(ks)
+    def _delete_from_ks1(self, idx: int) -> None:
 
         while idx + 1 < self._csize1 and self._ks1[idx+1]._key != 0 :
-            self._ks1[idx] = self._ks1[idx+1]
+            self._ks1[idx]._key = self._ks1[idx+1]._key
+            self._ks1[idx]._par = self._ks1[idx+1]._par
+            self._ks1[idx]._info = self._ks1[idx+1]._info
+            self._ks1[idx]._info._idx1 = idx
             idx += 1
 
         self._ks1[idx]._key = 0
@@ -217,7 +222,7 @@ class Table:
 
         info = InfoType(inf_num1, inf_num2, inf_s)
         item = Item(key1, key2, info)
-        item._p1 = self._add_in_ks1(key1, par, item)
+        item._idx1 = self._add_in_ks1(key1, par, item)
         item._p2 = self._add_in_ks2(key2, item)
         return 0 
         
@@ -293,12 +298,13 @@ class Table:
             return -3
         
         node = ks1._info._p2
+        idx = ks1._info._idx1
         del_item: Item = ks1._info
         del_info = del_item._info
         del del_info
         del del_item
 
-        self._delete_from_ks1(ks1)
+        self._delete_from_ks1(idx)
         self._delete_from_ks2(key2, node)
 
         return 0
@@ -313,12 +319,12 @@ class Table:
         
         del_item: Item = del_node._info
         del_info: InfoType = del_item._info
-        ks1: KeySpace1 = del_item._p1
+        ks1_idx: int = del_item._idx1
 
         del del_info
         del del_item
 
-        self._delete_from_ks1(ks1)
+        self._delete_from_ks1(ks1_idx)
         self._delete_from_ks2(key, del_node)
 
         return 0
@@ -326,6 +332,7 @@ class Table:
     def delete_by_key1(self, key: int) -> int:
         
         ks1 = self._find_in_ks1(key)
+        idx = ks1._info._idx1
 
         if not ks1:
             return -1
@@ -337,7 +344,7 @@ class Table:
 
         del del_info
         del del_item
-        self._delete_from_ks1(ks1)
+        self._delete_from_ks1(idx)
         self._delete_from_ks2(key2, del_node)
 
         return 0
@@ -353,10 +360,10 @@ class Table:
         count = ks2._elem_counter
         for i in range(count):
             del_node = ks2._node
-            ks1 = del_node._info._p1
+            ks1_idx = del_node._info._idx1
             del_item = del_node._info
             del_info = del_item._info
-            self._delete_from_ks1(ks1)
+            self._delete_from_ks1(ks1_idx)
             self._delete_from_ks2(key, del_node)
             del del_info
             del del_item

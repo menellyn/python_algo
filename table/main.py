@@ -39,12 +39,38 @@ def menu(table: Table) -> None:
     n = int(input("Enter number of operation: "))
 
     if n == 1:
-        key1 = int(input("Enter key1: "))
-        parent = int(input("Enter parent key: "))
+        while True:
+            try:
+                key1 = int(input("Enter key1: "))
+                break
+            except:
+                print("Key1 must be integer!")
+
+        while True:
+            try:
+                parent = int(input("Enter parent key: "))
+                break
+            except:
+                print("Parent key must be integer!")
+
         key2 = input("Enter key2: ")
-        num1 = int(input("Enter num1: "))
-        num2 = int(input("Enter num2: "))
+
+        while True:
+            try:
+                num1 = int(input("Enter num1: "))
+                break
+            except:
+                print("num1 must be integer!")
+
+        while True:
+            try:
+                num2 = int(input("Enter num2: "))
+                break
+            except:
+                print("num2 must be integer!")
+
         s = input("Enter str: ")
+
 
         flag = table.add(key1, parent, key2, num1, num2, s)
         if flag == -1:
@@ -58,7 +84,12 @@ def menu(table: Table) -> None:
         
         menu(table)
     elif n == 2:
-        key1 = int(input("Enter key1: "))
+        while True:
+            try:
+                key1 = int(input("Enter key1: "))
+                break
+            except:
+                print("Key1 must be integer!")
         key2 = input("Enter key2: ")
         info = table.find_by_key1_key2(key1, key2)
         if not info: 
@@ -68,7 +99,12 @@ def menu(table: Table) -> None:
         
         menu(table)
     elif n == 3:
-        key1 = int(input("Enter key1: "))
+        while True:
+            try:
+                key1 = int(input("Enter key1: "))
+                break
+            except:
+                print("Key1 must be integer!")
         key2 = input("Enter key2: ")
         flag = table.delete_by_key1_key2(key1, key2)
         if flag == -1:
@@ -80,7 +116,13 @@ def menu(table: Table) -> None:
         
         menu(table)
     elif n == 4:
-        key1 = int(input("Enter key1: "))
+        while True:
+            try:
+                key1 = int(input("Enter key1: "))
+                break
+            except:
+                print("Key1 must be integer!")
+
         ans = table.find_by_key1(key1)
         if not ans:
             print("No such key")
@@ -98,7 +140,12 @@ def menu(table: Table) -> None:
         
         menu(table)
     elif n == 6:
-        key1 = int(input("Enter key1: "))
+        while True:
+            try:
+                key1 = int(input("Enter key1: "))
+                break
+            except:
+                print("Key1 must be integer!")
 
         flag = table.delete_by_key1(key1)
 
@@ -116,7 +163,12 @@ def menu(table: Table) -> None:
         table.print()
         menu(table)
     elif n == 9:
-        parent = int(input("Enter parent key: "))
+        while True:
+            try:
+                parent = int(input("Enter parent key: "))
+                break
+            except:
+                print("Parent key must be integer!")
 
         ans = table.find_by_parent(parent)
         if not ans:
@@ -126,7 +178,12 @@ def menu(table: Table) -> None:
         menu(table)
     elif n == 10:
         key2 = input("Enter key2: ")
-        rel = int(input("Enter release: "))
+        while True:
+            try:
+                rel = int(input("Enter release: "))
+                break
+            except:
+                print("Release must be integer!")
 
         ans = table.find_by_key2_rel(key2, rel)
         
@@ -137,7 +194,12 @@ def menu(table: Table) -> None:
         menu(table)
     elif n == 11:
         key2 = input("Enter key2: ")
-        rel = int(input("Enter release: "))
+        while True:
+            try:
+                rel = int(input("Enter release: "))
+                break
+            except:
+                print("Release must be integer!")
 
         flag = table.delete_by_key2_rel(key2, rel)
 
@@ -153,8 +215,11 @@ if __name__ == "__main__":
     size_ks1, size_ks2 = 30, 10
     my_table: Table = Table(size_ks1, size_ks2)
     my_table.add(1, 0, "str1", 5, 32, "info1")
+    my_table.add(8, 1, "str1", 51, 312, "info11")
     my_table.add(3, 0, "str2", 77, 2, "info")
-    my_table.add(8, 3, "str1", 51, 312, "info11")
+    my_table.add(4, 3, "f", 1, 1, "d")
+    my_table.add(12, 1, "str2", 5, 5, "s")
+    my_table.add(2, 0, "g", 4, 3, "d")
 
     menu(my_table)
 
